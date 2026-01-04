@@ -224,11 +224,19 @@ const html = `<!DOCTYPE html>
 </html>`;
 
 export default {
-  fetch() {
+  async fetch(request, env) {
+    // Try to serve static assets from the `public` bucket via env.ASSETS
+    try {
+      const assetResp = await env.ASSETS.fetch(request);
+      // If asset exists, return it directly
+      if (assetResp && assetResp.status !== 404) return assetResp;
+    } catch (e) {
+      // ignore and fall back to serving HTML
+    }
+
+    // Fallback: serve the embedded HTML for index/root
     return new Response(html, {
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-      },
+      headers: { 'Content-Type': 'text/html; charset=utf-8' },
     });
   },
 };
