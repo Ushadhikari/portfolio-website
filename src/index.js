@@ -1,19 +1,234 @@
-export default {
-  async fetch(request, env, ctx) {
-    const url = new URL(request.url);
-    
-    // Default to index.html for root path
-    let filePath = url.pathname === '/' ? '/index.html' : url.pathname;
-    
-    try {
-      // Try to get the file from the public directory
-      const response = await env.ASSETS.fetch(request);
-      return response;
-    } catch (e) {
-      // Fallback: serve index.html
-      return new Response(await env.ASSETS.fetch(new Request(new URL('/index.html', request.url), request)), {
-        headers: { 'Content-Type': 'text/html' },
-      });
+const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usha Adhikari | Electrical & Electronics Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #06b6d4;
+      --accent: #9333ea;
+      --dark: #0f172a;
+      --light: #f8fafc;
     }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(180deg, #f8fafc, #eef2ff);
+      color: #1e293b;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(15,23,42,0.9);
+      backdrop-filter: blur(10px);
+      padding: 14px 0;
+      z-index: 100;
+      text-align: center;
+    }
+    nav a {
+      color: #e5e7eb;
+      margin: 0 20px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    nav a:hover {
+      color: var(--secondary);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 20px;
+    }
+    .hero-text h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-text p {
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+      color: #334155;
+    }
+    .hero-text span {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .hero-img {
+      text-align: center;
+    }
+    .hero-img img {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid #fff;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
+    section {
+      max-width: 1100px;
+      margin: 80px auto;
+      padding: 0 20px;
+    }
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: var(--dark);
+      position: relative;
+    }
+    h2::after {
+      content: "";
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      position: absolute;
+      left: 0;
+      bottom: -10px;
+    }
+    .about-box {
+      background: #fff;
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.1);
+    }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .skill-card {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      padding: 25px;
+      border-radius: 18px;
+      text-align: center;
+      font-weight: 600;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+    .skill-card:hover {
+      transform: translateY(-10px);
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+    }
+    .project {
+      background: #fff;
+      padding: 30px;
+      border-radius: 18px;
+      margin-bottom: 25px;
+      border-left: 6px solid var(--primary);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.1);
+    }
+    footer {
+      background: var(--dark);
+      color: #cbd5f5;
+      text-align: center;
+      padding: 30px;
+      margin-top: 90px;
+    }
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+    .project-link {
+      text-decoration: none;
+      color: #2563eb;
+      font-weight: 600;
+    }
+    .project-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Usha Adhikari</h1>
+      <p>
+        <span>Electrical & Electronics Engineer</span><br>
+        Specializing in hydropower modelling, dynamic system, renewable energy applications.
+      </p>
+    </div>
+    <div class="hero-img">
+      <img src="https://via.placeholder.com/260" alt="Usha Adhikari">
+    </div>
+  </div>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <div class="about-box">
+      I am a driven Electrical and Electronics Engineer with a strong foundation in analytical thinking, system-level problem solving, and applied research. I approach engineering challenges with a practical, solution-oriented mindset, ensuring projects are executed efficiently and to a high technical standard. My expertise centers on the dynamic modeling and simulation of hydropower systems, with particular emphasis on advanced control strategies for system stability, frequency regulation, and optimized power generation. I have hands-on experience translating theoretical models into practical solutions that support reliable and resilient energy systems. I am an effective communicator and collaborative team member, comfortable working across disciplines and with diverse stakeholders. Highly adaptable and detail-oriented, I perform well under pressure and manage time and resources efficiently. I am continually motivated to expand my technical expertise and contribute to innovative research and engineering efforts that accelerate the transition toward clean, intelligent, and sustainable energy systems.
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2>Core Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-card">Hydropower Modelling</div>
+      <div class="skill-card">Dynamic Systems</div>
+      <div class="skill-card">Python</div>
+      <div class="skill-card">MATLAB / Simulink</div>
+      <div class="skill-card">OpenModelica</div>
+      <div class="skill-card">Julia</div>
+      <div class="skill-card">Renewable Energy Systems</div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2>Projects & Research</h2>
+    <div class="project">
+      <p>
+        <a href="https://www.mic-journal.no/PDF/2025/MIC-2025-2-3.pdf" class="project-link">
+          Control Study of Hydropower System with Francis Turbine in Isolated Operation
+        </a>
+      </p>
+    </div>
+    <div class="project">
+      <p><a href="https://doi.org/10.1109/PowerCon60995.2024.10870523" class="project-link">Hydropower System with Francis Turbine for Control-Study</a></p>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <div class="card contact">
+      <p>
+        <a href="mailto:ushaadhikary25@gmail.com" class="project-link">✉️</a>
+        <a href="https://www.linkedin.com/in/usha-adhikari-7a41851b0/" class="project-link">🔗</a>
+        <a href="https://www.researchgate.net/profile/Usha-Adhikari-3?ev=hdr_xprf" class="project-link">🔬</a>
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Usha Adhikari. All rights reserved.
+  </footer>
+</body>
+</html>`;
+
+export default {
+  fetch() {
+    return new Response(html, {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+      },
+    });
   },
 };
