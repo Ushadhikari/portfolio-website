@@ -168,7 +168,7 @@ const html = `<!DOCTYPE html>
       </p>
     </div>
     <div class="hero-img">
-      <img src="https://via.placeholder.com/260" alt="Usha Adhikari">
+      <img src="/profile.jpg" alt="Usha Adhikari">
     </div>
   </div>
 
